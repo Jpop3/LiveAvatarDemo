@@ -11,15 +11,18 @@ export const useVoiceChat = () => {
   const [error, setError] = useState<string | null>(null);
 
   const mute = useCallback(async () => {
+    if (!sessionRef.current) return;
     return await sessionRef.current.voiceChat.mute();
   }, [sessionRef]);
 
   const unmute = useCallback(async () => {
+    if (!sessionRef.current) return;
     return await sessionRef.current.voiceChat.unmute();
   }, [sessionRef]);
 
   const start = useCallback(async () => {
     setError(null);
+    if (!sessionRef.current) return;
     try {
       return await sessionRef.current.voiceChat.start();
     } catch (e) {
@@ -32,6 +35,7 @@ export const useVoiceChat = () => {
 
   const stop = useCallback(() => {
     setError(null);
+    if (!sessionRef.current) return;
     return sessionRef.current.voiceChat.stop();
   }, [sessionRef]);
 

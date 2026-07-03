@@ -8,19 +8,23 @@ export const useSession = () => {
     useLiveAvatarContext();
 
   const startSession = useCallback(async () => {
+    if (!sessionRef.current) return;
     return await sessionRef.current.start();
   }, [sessionRef]);
 
   const stopSession = useCallback(async () => {
+    if (!sessionRef.current) return;
     return await sessionRef.current.stop();
   }, [sessionRef]);
 
   const keepAlive = useCallback(async () => {
+    if (!sessionRef.current) return;
     return await sessionRef.current.keepAlive();
   }, [sessionRef]);
 
   const attachElement = useCallback(
     (element: HTMLMediaElement) => {
+      if (!sessionRef.current) return;
       return sessionRef.current.attach(element);
     },
     [sessionRef],
