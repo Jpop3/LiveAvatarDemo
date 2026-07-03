@@ -66,19 +66,20 @@ const useSessionState = (sessionRef: React.RefObject<LiveAvatarSession>) => {
   const [isStreamReady, setIsStreamReady] = useState<boolean>(false);
 
   useEffect(() => {
-    if (sessionRef.current) {
-      sessionRef.current.on(SessionEvent.SESSION_STATE_CHANGED, (state) => {
+    const session = sessionRef.current;
+    if (session) {
+      session.on(SessionEvent.SESSION_STATE_CHANGED, (state) => {
         setSessionState(state);
         if (state === SessionState.DISCONNECTED) {
-          sessionRef.current.removeAllListeners();
-          sessionRef.current.voiceChat.removeAllListeners();
+          session.removeAllListeners();
+          session.voiceChat.removeAllListeners();
           setIsStreamReady(false);
         }
       });
-      sessionRef.current.on(SessionEvent.SESSION_STREAM_READY, () => {
+      session.on(SessionEvent.SESSION_STREAM_READY, () => {
         setIsStreamReady(true);
       });
-      sessionRef.current.on(
+      session.on(
         SessionEvent.SESSION_CONNECTION_QUALITY_CHANGED,
         setConnectionQuality,
       );
@@ -95,14 +96,15 @@ const useVoiceChatState = (sessionRef: React.RefObject<LiveAvatarSession>) => {
   );
 
   useEffect(() => {
-    if (sessionRef.current) {
-      sessionRef.current.voiceChat.on(VoiceChatEvent.MUTED, () => {
+    const session = sessionRef.current;
+    if (session) {
+      session.voiceChat.on(VoiceChatEvent.MUTED, () => {
         setIsMuted(true);
       });
-      sessionRef.current.voiceChat.on(VoiceChatEvent.UNMUTED, () => {
+      session.voiceChat.on(VoiceChatEvent.UNMUTED, () => {
         setIsMuted(false);
       });
-      sessionRef.current.voiceChat.on(
+      session.voiceChat.on(
         VoiceChatEvent.STATE_CHANGED,
         setVoiceChatState,
       );
@@ -117,17 +119,18 @@ const useTalkingState = (sessionRef: React.RefObject<LiveAvatarSession>) => {
   const [isAvatarTalking, setIsAvatarTalking] = useState(false);
 
   useEffect(() => {
-    if (sessionRef.current) {
-      sessionRef.current.on(AgentEventsEnum.USER_SPEAK_STARTED, () => {
+    const session = sessionRef.current;
+    if (session) {
+      session.on(AgentEventsEnum.USER_SPEAK_STARTED, () => {
         setIsUserTalking(true);
       });
-      sessionRef.current.on(AgentEventsEnum.USER_SPEAK_ENDED, () => {
+      session.on(AgentEventsEnum.USER_SPEAK_ENDED, () => {
         setIsUserTalking(false);
       });
-      sessionRef.current.on(AgentEventsEnum.AVATAR_SPEAK_STARTED, () => {
+      session.on(AgentEventsEnum.AVATAR_SPEAK_STARTED, () => {
         setIsAvatarTalking(true);
       });
-      sessionRef.current.on(AgentEventsEnum.AVATAR_SPEAK_ENDED, () => {
+      session.on(AgentEventsEnum.AVATAR_SPEAK_ENDED, () => {
         setIsAvatarTalking(false);
       });
     }
